@@ -1,0 +1,3 @@
+# Ignore common editor and OS files
+.DS_Store
+Thumbs.db
