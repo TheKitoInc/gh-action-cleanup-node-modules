@@ -1,12 +1,12 @@
-name: Auto Release Tag
+name: Auto Release Tag with Latest
 
 on:
   push:
     branches:
-      - main  # or your default branch
+      - main
 
 permissions:
-  contents: write  # needed to create tags and releases
+  contents: write
 
 jobs:
   create_release:
@@ -15,37 +15,37 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get latest tag
+      - name: Get latest semver tag
         id: get_tag
         run: |
-          # List tags that match v*.*.* pattern and sort by version descending
           latest_tag=$(git tag -l "v*.*.*" --sort=-v:refname | head -n1)
           echo "Latest tag: $latest_tag"
-
           if [ -z "$latest_tag" ]; then
-            echo "No previous tags, default to v0.0.0"
-            latest_tag="v0.0.0"
+            latest_tag="v1.0.0"
           fi
-
           echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
 
       - name: Calculate new tag
         id: new_tag
         run: |
           latest="${{ steps.get_tag.outputs.latest_tag }}"
-          # Extract major, minor, patch numbers
           IFS='.' read -r major minor patch <<< "${latest#v}"
           patch=$((patch + 1))
           new_tag="v${major}.${minor}.${patch}"
           echo "New tag: $new_tag"
           echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
 
-      - name: Create new tag
+      - name: Create and push new tag
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag ${{ steps.new_tag.outputs.new_tag }}
           git push origin ${{ steps.new_tag.outputs.new_tag }}
+
+      - name: Create or update 'latest' tag
+        run: |
+          git tag -f latest
+          git push origin latest --force
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
