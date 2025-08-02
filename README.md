@@ -33,3 +33,19 @@ permissions:
 jobs:
   cleanup:
     uses: TheKitoInc/gh-action-cleanup-node-modules@v1
+```
+
+> Replace `v1` with the specific version tag you publish.
+
+---
+
+## 💡 Contributing
+
+PRs welcome!  
+Open an issue or submit improvements — especially if you want to ignore other auto-generated folders too (e.g., `dist/`, `.next/`, `.turbo/`, etc.)
+
+---
+
+## 📜 License
+
+MIT
