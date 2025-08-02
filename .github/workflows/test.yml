@@ -1,0 +1,18 @@
+name: Test Cleanup Node Modules Action
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create dummy node_modules folder
+        run: mkdir -p some/subdir/node_modules && touch some/subdir/node_modules/dummy.txt
+
+      - name: Run cleanup action
+        uses: ./  # runs local action in the repo
