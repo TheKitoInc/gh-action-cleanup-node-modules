@@ -35,8 +35,6 @@ jobs:
     uses: TheKitoInc/gh-action-cleanup-node-modules@v1
 ```
 
-> Replace `v1` with the specific version tag you publish.
-
 ---
 
 ## 💡 Contributing
